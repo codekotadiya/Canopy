@@ -1,0 +1,295 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+<defs>
+  <radialGradient id="bg-radial" cx="50%" cy="44%" r="70%">
+    <stop offset="0%" stop-color="#130a2e"/>
+    <stop offset="100%" stop-color="#04060e"/>
+  </radialGradient>
+  <radialGradient id="glow-left" cx="22%" cy="44%" r="32%" gradientUnits="objectBoundingBox">
+    <stop offset="0%" stop-color="#7c2d12" stop-opacity="0.35"/>
+    <stop offset="100%" stop-color="#04060e" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="glow-right" cx="78%" cy="44%" r="32%" gradientUnits="objectBoundingBox">
+    <stop offset="0%" stop-color="#052e16" stop-opacity="0.45"/>
+    <stop offset="100%" stop-color="#04060e" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="glow-center" cx="50%" cy="44%" r="22%" gradientUnits="objectBoundingBox">
+    <stop offset="0%" stop-color="#4c1d95" stop-opacity="0.7"/>
+    <stop offset="100%" stop-color="#04060e" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="agent-fill" cx="38%" cy="30%" r="75%">
+    <stop offset="0%" stop-color="#3b0f8c"/>
+    <stop offset="100%" stop-color="#12043a"/>
+  </radialGradient>
+  <linearGradient id="title-grad" x1="420" y1="0" x2="780" y2="0" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#a78bfa"/>
+    <stop offset="100%" stop-color="#34d399"/>
+  </linearGradient>
+  <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="1.2" cy="1.2" r="0.8" fill="#161e30"/>
+  </pattern>
+  <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="22" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="badge-glow" x="-25%" y="-25%" width="150%" height="150%">
+    <feGaussianBlur stdDeviation="5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+
+<!-- ── BACKGROUND ── -->
+<rect width="1200" height="630" fill="url(#bg-radial)"/>
+<rect width="1200" height="630" fill="url(#glow-left)"/>
+<rect width="1200" height="630" fill="url(#glow-right)"/>
+<rect width="1200" height="630" fill="url(#glow-center)"/>
+<rect width="1200" height="630" fill="url(#dots)" opacity="0.65"/>
+
+<!-- Zone soft separators -->
+<line x1="390" y1="105" x2="390" y2="510" stroke="#1a1030" stroke-width="1" opacity="0.8"/>
+<line x1="810" y1="105" x2="810" y2="510" stroke="#0a1f10" stroke-width="1" opacity="0.8"/>
+
+<!-- ── HEADER ── -->
+<text x="600" y="54" text-anchor="middle" font-size="40" font-weight="800" fill="url(#title-grad)" letter-spacing="-0.5">&#127807; Canopy</text>
+<text x="600" y="81" text-anchor="middle" font-size="16" fill="#4b5563" letter-spacing="0.3">Understands your data.&#160;&#160;Not just moves it.</text>
+<line x1="440" y1="96" x2="760" y2="96" stroke="#1a1f2e" stroke-width="1"/>
+
+<!-- ── FLOW LINES (dashed, left → center) ── -->
+<path d="M 385 210 C 450 210 440 250 458 265" fill="none" stroke="#7c2d12" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.7"/>
+<path d="M 385 280 C 435 280 445 280 457 280" fill="none" stroke="#7c2d12" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.6"/>
+<path d="M 385 340 C 440 340 442 310 458 298" fill="none" stroke="#7c2d12" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.5"/>
+<!-- arrowheads at circle edge x≈458 -->
+<polygon points="450,259 458,265 450,271" fill="#7c2d12" opacity="0.7"/>
+<polygon points="450,274 458,280 450,286" fill="#7c2d12" opacity="0.6"/>
+<polygon points="450,292 458,298 450,304" fill="#7c2d12" opacity="0.5"/>
+
+<!-- ── FLOW LINES (solid, center → right) ── -->
+<path d="M 742 265 C 760 265 775 265 810 265" fill="none" stroke="#16a34a" stroke-width="2" opacity="0.75"/>
+<path d="M 742 280 C 770 280 780 280 810 280" fill="none" stroke="#16a34a" stroke-width="2" opacity="0.55"/>
+<path d="M 742 295 C 760 295 775 295 810 295" fill="none" stroke="#16a34a" stroke-width="2" opacity="0.35"/>
+<polygon points="802,259 810,265 802,271" fill="#16a34a" opacity="0.75"/>
+<polygon points="802,274 810,280 802,286" fill="#16a34a" opacity="0.55"/>
+<polygon points="802,289 810,295 802,301" fill="#16a34a" opacity="0.35"/>
+
+<!-- ════════════════ LEFT — MESSY INPUT ════════════════ -->
+
+<text x="195" y="125" text-anchor="middle" font-size="10" font-weight="700" fill="#4b5563" letter-spacing="2.5">ANY SOURCE</text>
+
+<!-- Format bubbles — scattered, overlapping slightly -->
+<rect x="60"  y="145" width="88" height="40" rx="20" fill="#3b0a01" stroke="#dc2626" stroke-width="1.5" filter="url(#badge-glow)"/>
+<text x="104" y="170" text-anchor="middle" font-size="15" font-weight="800" fill="#f87171">CSV</text>
+
+<rect x="210" y="138" width="96" height="40" rx="20" fill="#3b0a01" stroke="#ea580c" stroke-width="1.5" filter="url(#badge-glow)"/>
+<text x="258" y="163" text-anchor="middle" font-size="15" font-weight="800" fill="#fb923c">JSON</text>
+
+<rect x="48"  y="248" width="88" height="40" rx="20" fill="#3b0a01" stroke="#dc2626" stroke-width="1.5"/>
+<text x="92"  y="273" text-anchor="middle" font-size="15" font-weight="800" fill="#f87171">SQL</text>
+
+<rect x="192" y="255" width="88" height="40" rx="20" fill="#3b0a01" stroke="#ea580c" stroke-width="1.5"/>
+<text x="236" y="280" text-anchor="middle" font-size="15" font-weight="800" fill="#fb923c">PDF</text>
+
+<rect x="118" y="200" width="104" height="40" rx="20" fill="#2a0702" stroke="#b91c1c" stroke-width="1"/>
+<text x="170" y="225" text-anchor="middle" font-size="15" font-weight="800" fill="#fca5a5">DOCX</text>
+
+<!-- Messy value snippets -->
+<text x="52"  y="352" font-size="12" fill="#7f1d1d" font-family="monospace">$75,000</text>
+<text x="155" y="370" font-size="12" fill="#7f1d1d" font-family="monospace">01/15/2020</text>
+<text x="52"  y="390" font-size="12" fill="#7f1d1d" font-family="monospace">Yes / true / 1</text>
+<text x="168" y="408" font-size="12" fill="#7f1d1d" font-family="monospace">N/A</text>
+<text x="68"  y="424" font-size="12" fill="#7f1d1d" font-family="monospace">+1 (555) 867-5309</text>
+
+<!-- warning indicators -->
+<text x="315" y="195" font-size="22" fill="#7c2d12" opacity="0.5">&#8263;</text>
+<text x="42"  y="230" font-size="18" fill="#991b1b" opacity="0.5">&#9888;</text>
+<text x="300" y="310" font-size="16" fill="#991b1b" opacity="0.4">&#9888;</text>
+
+<text x="195" y="468" text-anchor="middle" font-size="11" fill="#7f1d1d" font-style="italic">Inconsistent &#183; Mixed &#183; Messy</text>
+
+<!-- ════════════════ CENTER — CANOPY AGENT ════════════════ -->
+
+<!-- Glow halos (manual, concentric) -->
+<circle cx="600" cy="285" r="200" fill="#4c1d95" opacity="0.04"/>
+<circle cx="600" cy="285" r="180" fill="#5b21b6" opacity="0.05"/>
+<circle cx="600" cy="285" r="162" fill="#6d28d9" opacity="0.07"/>
+
+<!-- Outer dashed orbit -->
+<circle cx="600" cy="285" r="155" fill="none" stroke="#4c1d95" stroke-width="1" stroke-dasharray="7 5" opacity="0.55"/>
+
+<!-- Ring -->
+<circle cx="600" cy="285" r="142" fill="none" stroke="#7c3aed" stroke-width="2.5" opacity="0.9"/>
+
+<!-- Core circle -->
+<circle cx="600" cy="285" r="124" fill="url(#agent-fill)"/>
+<circle cx="600" cy="285" r="124" fill="none" stroke="#6d28d9" stroke-width="1.5"/>
+
+<!-- Brand name -->
+<text x="600" y="258" text-anchor="middle" font-size="11" fill="#7c3aed" letter-spacing="3.5" font-weight="700">AI AGENT</text>
+<text x="600" y="295" text-anchor="middle" font-size="34" font-weight="800" fill="#ede9fe" letter-spacing="-1">Canopy</text>
+
+<!-- "4-8 LLM calls" pill inside circle -->
+<rect x="520" y="304" width="160" height="22" rx="11" fill="#2d1065" stroke="#4c1d95" stroke-width="1"/>
+<text x="600" y="319" text-anchor="middle" font-size="10" fill="#c4b5fd">4–8 LLM calls &#183; never per-row</text>
+
+<!-- 3 step nodes on the ring -->
+<!-- Node positions on ring (r=142):
+     10 o'clock (SVG 210°): x=600+142*cos(210°)=600-122.9=477, y=285+142*sin(210°)=285-71=214
+     6 o'clock  (SVG 90°):  x=600, y=285+142=427   ← too low
+     Let me use: top (270°), lower-left (210°), lower-right (330°)
+     270°: x=600, y=285-142=143  ← too close to header
+     Let me use 3 nodes around the bottom half:
+     210° (lower-left):  x=600+142*cos(210°)=477, y=285+142*sin(210°)=356
+       cos(210°)=-0.866, sin(210°)=-0.5 → x=477, y=214  ← that's UPPER left
+       Wait, cos(210°) = cos(180°+30°) = -cos30 = -0.866
+             sin(210°) = sin(180°+30°) = -sin30 = -0.5
+       So y = 285 + 142*(-0.5) = 285-71 = 214 ← upper area
+
+     Let me use clock positions for visual impact:
+     - 11 o'clock: SVG angle = (11h * 30° - 90°) = 330° - 90° = 240°
+       Wait. Clock 12 = top = SVG 270°. Each hour = 30°.
+       Clock 11 = 270° + 30° = 300° (going CCW from top in clock = going CCW in SVG)
+       Actually SVG angles go CW. Clock also goes CW. Clock 12 = SVG 270°.
+       Clock N = SVG (270° + N*30°) % 360°... no.
+
+       Clock: 12=top, 3=right, 6=bottom, 9=left. Going CW.
+       SVG: 0=right, 90=bottom, 180=left, 270=top. Going CW.
+
+       Clock 12 = top = SVG 270°.
+       Clock 3  = right = SVG 0°.
+       Clock 6  = bottom = SVG 90°.
+       Clock 9  = left = SVG 180°.
+
+       Difference: SVG = Clock - 90° (mod 360°)...
+       No: Clock 12 = 0° in clock. SVG equivalent = 270°. So SVG = Clock_degrees - 90° doesn't work for clock 12.
+
+       Let me just define: SVG_angle = (Clock_angle - 90°) mod 360° where Clock_angle = (hour * 30°)
+       Clock 12 = 0° → SVG = (0-90) mod 360 = 270° ✓
+       Clock 3 = 90° → SVG = (90-90) = 0° ✓
+       Clock 6 = 180° → SVG = 90° ✓
+       Clock 9 = 270° → SVG = 180° ✓
+
+       So Clock 11 = 330° → SVG = 240°
+       cos(240°) = -0.5, sin(240°) = -0.866
+       x = 600 + 142*(-0.5) = 529, y = 285 + 142*(-0.866) = 162 ← upper-left
+
+       Clock 1 = 30° → SVG = -60° = 300°
+       cos(300°) = 0.5, sin(300°) = -0.866
+       x = 600 + 142*0.5 = 671, y = 285 + 142*(-0.866) = 162 ← upper-right
+
+       These are too close to y=162 which is in the circle upper area but the header is at y=96.
+       Circle top = 285-142 = 143, so y=162 is 19px inside from the top of the circle.
+       That's fine for nodes on the ring.
+
+       But wait - I want the step labels to be OUTSIDE the circle. For nodes at y=162,
+       labels would be at y≈140, which overlaps with the header area (separator at y=96).
+
+       Let me put them at the bottom of the circle instead:
+       Clock 5 = 150° → SVG = 60°: x=600+142*cos(60°)=600+71=671, y=285+142*sin(60°)=285+123=408
+       Clock 7 = 210° → SVG = 120°: x=600+142*cos(120°)=600-71=529, y=285+142*sin(120°)=285+123=408
+       Clock 6 = 180° → SVG = 90°: x=600, y=285+142=427
+
+       These are at y=408 and y=427, below the circle bottom.
+       With step pills at y~435, I have:
+       Circle bottom: 285+142=427. Outer ring bottom: 285+155=440.
+
+       Nodes at clock 5 (671, 408), clock 6 (600, 427), clock 7 (529, 408) - these are ON the ring.
+       Labels below each at y≈425-445.
+
+       But y=427 overlaps with the outer ring edge at y=440. Too cramped.
+
+       Better: 3 node dots at bottom of ring, with small label pills just below them.
+       Nodes: clock 4,6,8 type positions.
+
+       Actually let me just skip the ring nodes and do the 3 step pills in a clean row below the circle.
+       Circle bottom: 285+142=427.
+       Step pills at y=443 (gap of 16px from ring edge).
+       Bottom stats bar at y=518.
+       Gap: 518-473=45px. Might be tight but workable.
+-->
+
+<!-- 3 step pills row below circle -->
+<rect x="448" y="443" width="100" height="28" rx="14" fill="#1a0f3d" stroke="#4c1d95" stroke-width="1"/>
+<circle cx="466" cy="457" r="9" fill="#4c1d95"/>
+<text x="466" y="461" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">1</text>
+<text x="490" y="461" font-size="11" fill="#c4b5fd" font-weight="600">Understand</text>
+
+<rect x="548" y="443" width="104" height="28" rx="14" fill="#1a0f3d" stroke="#6d28d9" stroke-width="1.5"/>
+<circle cx="566" cy="457" r="9" fill="#7c3aed"/>
+<text x="566" y="461" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">2</text>
+<text x="590" y="461" font-size="11" fill="#c4b5fd" font-weight="700">Generate</text>
+
+<rect x="652" y="443" width="100" height="28" rx="14" fill="#1a0f3d" stroke="#4c1d95" stroke-width="1"/>
+<circle cx="670" cy="457" r="9" fill="#16a34a"/>
+<text x="670" y="461" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">&#10003;</text>
+<text x="694" y="461" font-size="11" fill="#86efac" font-weight="600">Execute</text>
+
+<!-- ════════════════ RIGHT — CLEAN OUTPUT ════════════════ -->
+
+<text x="1005" y="125" text-anchor="middle" font-size="10" font-weight="700" fill="#4b5563" letter-spacing="2.5">ANY DATABASE</text>
+
+<!-- Clean DB table -->
+<rect x="838" y="140" width="332" height="28" rx="5" fill="#052e16" stroke="#166534" stroke-width="1.5"/>
+<text x="848" y="158" font-size="10" fill="#4ade80" font-family="'SF Mono',Consolas,monospace" font-weight="600">id    salary       is_active   date</text>
+
+<rect x="838" y="170" width="332" height="24" fill="#020d06"/>
+<text x="848" y="186" font-size="10" fill="#d1d5db" font-family="'SF Mono',Consolas,monospace">1     75000.00     true        2020-01-15</text>
+
+<rect x="838" y="195" width="332" height="24" fill="#030f08"/>
+<text x="848" y="211" font-size="10" fill="#d1d5db" font-family="'SF Mono',Consolas,monospace">2     62000.00     true        2019-03-22</text>
+
+<rect x="838" y="220" width="332" height="24" fill="#020d06"/>
+<text x="848" y="236" font-size="10" fill="#d1d5db" font-family="'SF Mono',Consolas,monospace">3     88500.00     true        2021-03-01</text>
+
+<rect x="838" y="245" width="332" height="24" fill="#030f08"/>
+<text x="848" y="261" font-size="10" fill="#9ca3af" font-family="'SF Mono',Consolas,monospace">4     95000.00     false       2018-12-31</text>
+
+<rect x="838" y="270" width="332" height="24" fill="#020d06"/>
+<text x="848" y="286" font-size="10" fill="#374151" font-family="'SF Mono',Consolas,monospace">&#xB7;&#xB7;&#xB7;   &#xB7;&#xB7;&#xB7;          &#xB7;&#xB7;&#xB7;         &#xB7;&#xB7;&#xB7;</text>
+
+<!-- Checkmarks -->
+<text x="848" y="323" font-size="12" fill="#22c55e">&#10003;&#160; Consistent types &amp; formats</text>
+<text x="848" y="343" font-size="12" fill="#22c55e">&#10003;&#160; Schema auto-created</text>
+<text x="848" y="363" font-size="12" fill="#22c55e">&#10003;&#160; Bulk inserts &#183; handles 1 GB+</text>
+<text x="848" y="383" font-size="12" fill="#22c55e">&#10003;&#160; Review queue for edge cases</text>
+
+<!-- Write mode chips -->
+<text x="848" y="412" font-size="10" fill="#374151">Write modes:</text>
+<rect x="848"  y="418" width="66" height="22" rx="11" fill="#022c17" stroke="#15803d" stroke-width="1"/>
+<text x="881"  y="433" text-anchor="middle" font-size="10" fill="#4ade80" font-weight="700">INSERT</text>
+<rect x="922"  y="418" width="70" height="22" rx="11" fill="#022c17" stroke="#15803d" stroke-width="1"/>
+<text x="957"  y="433" text-anchor="middle" font-size="10" fill="#4ade80" font-weight="700">UPSERT</text>
+<rect x="1000" y="418" width="74" height="22" rx="11" fill="#022c17" stroke="#15803d" stroke-width="1"/>
+<text x="1037" y="433" text-anchor="middle" font-size="10" fill="#4ade80" font-weight="700">REPLACE</text>
+
+<text x="1005" y="468" text-anchor="middle" font-size="11" fill="#15803d" font-style="italic">Normalized &#183; Typed &#183; Ready</text>
+
+<!-- ════════════════ BOTTOM STATS ════════════════ -->
+<line x1="0" y1="510" x2="1200" y2="510" stroke="#12192e" stroke-width="1.5"/>
+
+<!-- Stat 1 -->
+<text x="150" y="551" text-anchor="middle" font-size="34" font-weight="800" fill="#a78bfa">4–8</text>
+<text x="150" y="571" text-anchor="middle" font-size="11" font-weight="600" fill="#6b7280">LLM Calls Total</text>
+<text x="150" y="588" text-anchor="middle" font-size="10" fill="#374151">Not per-row &#183; scales cheaply</text>
+<line x1="300" y1="522" x2="300" y2="598" stroke="#12192e" stroke-width="1"/>
+
+<!-- Stat 2 -->
+<text x="450" y="551" text-anchor="middle" font-size="34" font-weight="800" fill="#34d399">100%</text>
+<text x="450" y="571" text-anchor="middle" font-size="11" font-weight="600" fill="#6b7280">Local LLM Option</text>
+<text x="450" y="588" text-anchor="middle" font-size="10" fill="#374151">Ollama &#183; zero data sent out</text>
+<line x1="600" y1="522" x2="600" y2="598" stroke="#12192e" stroke-width="1"/>
+
+<!-- Stat 3 -->
+<text x="750" y="551" text-anchor="middle" font-size="34" font-weight="800" fill="#38bdf8">Open</text>
+<text x="750" y="571" text-anchor="middle" font-size="11" font-weight="600" fill="#6b7280">Source &#183; Self-Host Free</text>
+<text x="750" y="588" text-anchor="middle" font-size="10" fill="#374151">Cloud subscription also available</text>
+<line x1="900" y1="522" x2="900" y2="598" stroke="#12192e" stroke-width="1"/>
+
+<!-- Stat 4 -->
+<text x="1050" y="551" text-anchor="middle" font-size="34" font-weight="800" fill="#fb923c">&#8734;</text>
+<text x="1050" y="571" text-anchor="middle" font-size="11" font-weight="600" fill="#6b7280">Plugin Architecture</text>
+<text x="1050" y="588" text-anchor="middle" font-size="10" fill="#374151">Sources &#183; targets &#183; LLM providers</text>
+
+<!-- ── BOTTOM BAR ── -->
+<rect x="0" y="610" width="1200" height="20" fill="#030508"/>
+<line x1="0" y1="610" x2="1200" y2="610" stroke="#0d1218" stroke-width="1"/>
+<text x="600" y="624" text-anchor="middle" font-size="10" fill="#1f2937">github.com/codekotadiya/Canopy&#160;&#160;&#183;&#160;&#160;Open Source&#160;&#160;&#183;&#160;&#160;Python 3.11+</text>
+
+</svg>
