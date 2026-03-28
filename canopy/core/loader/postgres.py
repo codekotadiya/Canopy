@@ -9,7 +9,7 @@ from sqlalchemy.engine import Engine
 from canopy.core.context.schema_inspector import SchemaInspector
 from canopy.core.loader.base import BaseLoader
 from canopy.models.execution import LoadSummary
-from canopy.models.schema import ColumnSchema, TargetSchema
+from canopy.models.schema import TargetSchema
 
 # Map SQL type strings from LLM proposals to SQLAlchemy types.
 # Keys are uppercase for case-insensitive matching.

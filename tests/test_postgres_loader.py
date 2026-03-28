@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import sqlalchemy as sa
-from sqlalchemy.engine import Engine
 
 from canopy.core.loader.postgres import PostgresLoader
 from canopy.models.schema import ColumnSchema, TargetSchema

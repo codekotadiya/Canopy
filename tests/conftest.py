@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
-from typing import Any, Iterator
 
 import pytest
 from sqlalchemy import create_engine
@@ -11,7 +10,6 @@ from sqlalchemy.engine import Engine
 from canopy.models.analysis import (
     ColumnAnalysis,
     FieldMapping,
-    SchemaProposal,
     SourceAnalysis,
 )
 from canopy.models.schema import ColumnSchema, TargetSchema
