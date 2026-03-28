@@ -28,7 +28,7 @@ def create_llm_provider(config: PipelineConfig) -> BaseLLMProvider:
 
 def create_loader(config: PipelineConfig) -> BaseLoader:
     target_type = config.target.type.lower()
-    if target_type in ("postgres", "postgresql"):
+    if target_type in ("postgres", "postgresql", "sqlite"):
         from canopy.core.loader.postgres import PostgresLoader
 
         return PostgresLoader(config.target.connection_string)

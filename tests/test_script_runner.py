@@ -76,17 +76,38 @@ def transform(row):
         runner = ScriptRunner()
         result = runner.run_on_sample(script, [{"a": "1"}])
         assert result.success is False
-        assert "missing a transform()" in result.errors[0]
+        assert "transform" in result.errors[0].lower()
 
     def test_script_load_failure(self, tmp_path: Path):
         script = tmp_path / "nonexistent.py"
         runner = ScriptRunner()
         result = runner.run_on_sample(script, [{"a": "1"}])
         assert result.success is False
-        assert "Failed to load" in result.errors[0]
+        assert "Cannot read script" in result.errors[0]
 
     def test_syntax_error_in_script(self, tmp_path: Path):
         script = _write_script(tmp_path, "def transform(row\n    return row\n")
         runner = ScriptRunner()
         result = runner.run_on_sample(script, [{"a": "1"}])
         assert result.success is False
+        assert "Syntax error" in result.errors[0]
+
+    def test_blocked_import_rejected(self, tmp_path: Path):
+        script = _write_script(
+            tmp_path,
+            'import os\ndef transform(row):\n    return row\n',
+        )
+        runner = ScriptRunner()
+        result = runner.run_on_sample(script, [{"a": "1"}])
+        assert result.success is False
+        assert "Blocked import" in result.errors[0]
+
+    def test_blocked_builtin_rejected(self, tmp_path: Path):
+        script = _write_script(
+            tmp_path,
+            'def transform(row):\n    exec("pass")\n    return row\n',
+        )
+        runner = ScriptRunner()
+        result = runner.run_on_sample(script, [{"a": "1"}])
+        assert result.success is False
+        assert "Blocked builtin" in result.errors[0]
