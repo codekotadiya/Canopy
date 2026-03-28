@@ -14,6 +14,10 @@ def create_connector(config: PipelineConfig) -> BaseConnector:
         from canopy.core.ingestion.csv_connector import CsvConnector
 
         return CsvConnector(config.source)
+    if source_type == "json":
+        from canopy.core.ingestion.json_connector import JsonConnector
+
+        return JsonConnector(config.source)
     raise ValueError(f"Unsupported source type: {source_type}")
 
 

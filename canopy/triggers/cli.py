@@ -110,7 +110,7 @@ def rerun(
             total_loaded += loaded
         total_failed += len(result.errors)
 
-    load_summary = loader.finalize()
+    loader.finalize()
     console.print(
         f"Done: {total_loaded} loaded, {total_failed} failed "
         f"from {total_source} source rows"

@@ -15,3 +15,7 @@ class BaseLLMProvider(ABC):
     def is_cloud(self) -> bool:
         """Return True if data leaves the local machine (triggers privacy warning)."""
         ...
+
+    def health_check(self) -> bool:
+        """Return True if the provider is reachable. Override in subclasses."""
+        return True

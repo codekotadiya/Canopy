@@ -8,7 +8,6 @@ from pathlib import Path
 
 from canopy.core.context.factories import create_connector, create_llm_provider, create_loader
 from canopy.core.context.parsers import (
-    ParseError,
     parse_mapping_response,
     parse_review_verdict,
     parse_source_analysis,
@@ -26,7 +25,6 @@ from canopy.core.script_gen.validator import validate_script
 from canopy.models.analysis import FieldMapping, SchemaProposal
 from canopy.models.config import PipelineConfig
 from canopy.models.execution import JobSummary
-from canopy.models.schema import TargetSchema
 
 
 class CanopyError(Exception):
@@ -52,6 +50,13 @@ class ContextEngine:
         errors: list[str] = []
 
         try:
+            # Provider health check
+            if hasattr(self.llm, "health_check") and not self.llm.health_check():
+                raise CanopyError(
+                    f"LLM provider health check failed. "
+                    f"Ensure the provider ({self.config.llm.provider}) is running and reachable."
+                )
+
             # Privacy warning
             if self.llm.is_cloud():
                 msg = (
@@ -62,19 +67,19 @@ class ContextEngine:
                 warnings.append(msg)
 
             # === Step 1: Understand Source ===
-            log_fn(f"[Step 1/6] Reading source data sample...")
+            log_fn("[Step 1/6] Reading source data sample...")
             columns = self.connector.get_raw_columns()
             sample_rows = self.connector.read_sample(self.config.source.sample_size)
             log_fn(f"  Read {len(sample_rows)} sample rows with {len(columns)} columns")
 
-            log_fn(f"[Step 2/6] Analyzing source data with LLM...")
+            log_fn("[Step 2/6] Analyzing source data with LLM...")
             understand_prompt = build_understand_source_prompt(columns, sample_rows)
             analysis_text = self.llm.complete(understand_prompt, system=SYSTEM_PROMPT)
             source_analysis = parse_source_analysis(analysis_text)
             log_fn(f"  Identified {len(source_analysis.columns)} columns")
 
             # === Step 2: Inspect Target ===
-            log_fn(f"[Step 3/6] Inspecting target schema...")
+            log_fn("[Step 3/6] Inspecting target schema...")
             target_schema = self.loader.get_target_schema(self.config.target.table_name)
 
             if target_schema is None and not self.config.target.create_if_missing:
@@ -86,7 +91,7 @@ class ContextEngine:
             if target_schema is not None:
                 log_fn(f"  Found existing table with {len(target_schema.columns)} columns")
             else:
-                log_fn(f"  Table does not exist, will propose new schema")
+                log_fn("  Table does not exist, will propose new schema")
 
             inspect_prompt = build_inspect_target_prompt(source_analysis, target_schema)
             mapping_text = self.llm.complete(inspect_prompt, system=SYSTEM_PROMPT)
@@ -106,7 +111,7 @@ class ContextEngine:
             log_fn(f"  Mapped {len(field_mappings)} fields")
 
             # === Step 3: Generate Script ===
-            log_fn(f"[Step 4/6] Generating conversion script...")
+            log_fn("[Step 4/6] Generating conversion script...")
             gen_prompt = build_generate_script_prompt(
                 source_analysis, field_mappings, target_schema
             )
@@ -182,7 +187,7 @@ class ContextEngine:
                 )
 
             # === Step 6: Full Execution ===
-            log_fn(f"[Step 6/6] Executing on full dataset...")
+            log_fn("[Step 6/6] Executing on full dataset...")
             total_source = 0
             total_transformed = 0
             total_loaded = 0
@@ -207,7 +212,7 @@ class ContextEngine:
                         errors.append(load_err)
                         total_failed += len(result.output_rows)
 
-            load_summary = self.loader.finalize()
+            self.loader.finalize()
             duration = time.monotonic() - start_time
 
             status = "success"
