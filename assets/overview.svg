@@ -1,0 +1,316 @@
+<svg width="1200" height="680" viewBox="0 0 1200 680" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="680" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#07091a"/>
+    <stop offset="100%" stop-color="#0d1117"/>
+  </linearGradient>
+  <linearGradient id="title-grad" x1="0" y1="0" x2="300" y2="0" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#a78bfa"/>
+    <stop offset="100%" stop-color="#34d399"/>
+  </linearGradient>
+  <linearGradient id="agent-bg" x1="268" y1="108" x2="268" y2="518" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#16073a"/>
+    <stop offset="100%" stop-color="#0f0527"/>
+  </linearGradient>
+  <pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+    <circle cx="1" cy="1" r="0.8" fill="#1e2433"/>
+  </pattern>
+  <filter id="glow-purple" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur stdDeviation="14" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+
+<!-- ─── BACKGROUND ─── -->
+<rect width="1200" height="680" fill="url(#bg)"/>
+<rect width="1200" height="680" fill="url(#dots)" opacity="0.7"/>
+
+<!-- Agent glow backdrop -->
+<ellipse cx="416" cy="313" rx="185" ry="215" fill="#6d28d9" opacity="0.07" filter="url(#glow-purple)"/>
+
+<!-- ─── HEADER ─── -->
+<text x="38" y="60" font-size="34" font-weight="800" fill="url(#title-grad)" letter-spacing="-0.5">&#127807; Canopy</text>
+<text x="600" y="45" text-anchor="middle" font-size="13" fill="#6b7280" letter-spacing="0.5">OPEN SOURCE  ·  AI-POWERED  ·  PYTHON 3.11+</text>
+<text x="600" y="70" text-anchor="middle" font-size="19" font-weight="600" fill="#e2e8f0">Understands your data. Not just moves it.</text>
+
+<!-- Star CTA badge -->
+<rect x="1010" y="28" width="168" height="30" rx="15" fill="#1c1033" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="1094" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#a78bfa">&#11088; Star on GitHub</text>
+
+<line x1="0" y1="95" x2="1200" y2="95" stroke="#161d2e" stroke-width="1.5"/>
+
+<!-- ════════════════════════════════ BOX 1 — RAW INPUT ════════════════════════════════ -->
+<rect x="20" y="108" width="208" height="410" rx="12" fill="#0f1623" stroke="#1e2940" stroke-width="1.5"/>
+<rect x="20" y="108" width="208" height="4" rx="2" fill="#f97316"/>
+<!-- title -->
+<text x="124" y="129" text-anchor="middle" font-size="10" font-weight="700" fill="#fb923c" letter-spacing="1.5">RAW INPUT</text>
+<text x="124" y="150" text-anchor="middle" font-size="15" font-weight="700" fill="#f1f5f9">Messy Source Data</text>
+<line x1="34" y1="160" x2="214" y2="160" stroke="#1e2940" stroke-width="1"/>
+
+<!-- CSV table header -->
+<rect x="30" y="166" width="188" height="21" rx="3" fill="#1c2a3a"/>
+<text x="36" y="181" font-size="9" fill="#64748b" font-family="'SF Mono','Fira Code',Consolas,monospace">Name        Salary   Active  Date</text>
+
+<!-- Row 1 -->
+<rect x="30" y="189" width="188" height="21" rx="0" fill="#0f1a26"/>
+<text x="36" y="203" font-size="9" fill="#cbd5e1" font-family="'SF Mono','Fira Code',Consolas,monospace">John S.  </text>
+<text x="106" y="203" font-size="9" fill="#fca5a5" font-family="'SF Mono','Fira Code',Consolas,monospace">$75,000  </text>
+<text x="162" y="203" font-size="9" fill="#86efac" font-family="'SF Mono','Fira Code',Consolas,monospace">Yes</text>
+
+<!-- Row 2 -->
+<rect x="30" y="211" width="188" height="21" fill="#0b1520"/>
+<text x="36" y="225" font-size="9" fill="#cbd5e1" font-family="'SF Mono','Fira Code',Consolas,monospace">Jane D.  62000    </text>
+<text x="162" y="225" font-size="9" fill="#fbbf24" font-family="'SF Mono','Fira Code',Consolas,monospace">true</text>
+
+<!-- Row 3 -->
+<rect x="30" y="233" width="188" height="21" fill="#0f1a26"/>
+<text x="36" y="247" font-size="9" fill="#cbd5e1" font-family="'SF Mono','Fira Code',Consolas,monospace">Bob J.  </text>
+<text x="100" y="247" font-size="9" fill="#fca5a5" font-family="'SF Mono','Fira Code',Consolas,monospace">$88,500  </text>
+<text x="162" y="247" font-size="9" fill="#fbbf24" font-family="'SF Mono','Fira Code',Consolas,monospace">1</text>
+
+<!-- Row 4 -->
+<rect x="30" y="255" width="188" height="21" fill="#0b1520"/>
+<text x="36" y="269" font-size="9" fill="#cbd5e1" font-family="'SF Mono','Fira Code',Consolas,monospace">Alice W. 95000    </text>
+<text x="162" y="269" font-size="9" fill="#86efac" font-family="'SF Mono','Fira Code',Consolas,monospace">No</text>
+
+<line x1="34" y1="284" x2="214" y2="284" stroke="#1e2940" stroke-width="1"/>
+
+<!-- Issues list -->
+<text x="36" y="302" font-size="11" font-weight="600" fill="#94a3b8">&#9888; Issues detected:</text>
+<text x="36" y="320" font-size="10" fill="#fbbf24">&#9679; Mixed date formats</text>
+<text x="36" y="337" font-size="10" fill="#fbbf24">&#9679; Currency symbols ($, ,)</text>
+<text x="36" y="354" font-size="10" fill="#fbbf24">&#9679; Boolean: Yes / true / 1</text>
+<text x="36" y="371" font-size="10" fill="#fbbf24">&#9679; Null &amp; empty values</text>
+<text x="36" y="388" font-size="10" fill="#fbbf24">&#9679; Mixed phone formats</text>
+
+<line x1="34" y1="406" x2="214" y2="406" stroke="#1e2940" stroke-width="1"/>
+<text x="124" y="422" text-anchor="middle" font-size="10" fill="#475569">Supported sources:</text>
+<!-- format badges -->
+<rect x="30"  y="428" width="36" height="16" rx="4" fill="#1c2a3a" stroke="#2d3d52" stroke-width="1"/>
+<text x="48"  y="440" text-anchor="middle" font-size="9" fill="#64748b" font-family="monospace">CSV</text>
+<rect x="72"  y="428" width="40" height="16" rx="4" fill="#1c2a3a" stroke="#2d3d52" stroke-width="1"/>
+<text x="92"  y="440" text-anchor="middle" font-size="9" fill="#64748b" font-family="monospace">JSON</text>
+<rect x="118" y="428" width="36" height="16" rx="4" fill="#1c2a3a" stroke="#2d3d52" stroke-width="1"/>
+<text x="136" y="440" text-anchor="middle" font-size="9" fill="#64748b" font-family="monospace">SQL</text>
+<rect x="160" y="428" width="40" height="16" rx="4" fill="#1c2a3a" stroke="#2d3d52" stroke-width="1"/>
+<text x="180" y="440" text-anchor="middle" font-size="9" fill="#64748b" font-family="monospace">PDF</text>
+
+<text x="124" y="487" text-anchor="middle" font-size="26">&#128451;</text>
+<text x="124" y="510" text-anchor="middle" font-size="10" fill="#374151">any messy source</text>
+
+<!-- ─── ARROW 1 ─── -->
+<line x1="233" y1="313" x2="260" y2="313" stroke="#374151" stroke-width="2"/>
+<polygon points="260,307 268,313 260,319" fill="#374151"/>
+<rect x="231" y="296" width="40" height="28" rx="5" fill="#111827" stroke="#1f2937" stroke-width="1"/>
+<text x="251" y="307" text-anchor="middle" font-size="8" fill="#64748b">sample</text>
+<text x="251" y="319" text-anchor="middle" font-size="8" fill="#64748b">rows</text>
+
+<!-- ════════════════════════════════ BOX 2 — LLM AGENT ════════════════════════════════ -->
+<!-- outer glow border -->
+<rect x="265" y="105" width="302" height="416" rx="14" fill="none" stroke="#6d28d9" stroke-width="1" opacity="0.5"/>
+<rect x="268" y="108" width="296" height="410" rx="12" fill="url(#agent-bg)" stroke="#7c3aed" stroke-width="2"/>
+<rect x="268" y="108" width="296" height="4" rx="2" fill="#7c3aed"/>
+
+<!-- title -->
+<text x="416" y="129" text-anchor="middle" font-size="10" font-weight="700" fill="#a78bfa" letter-spacing="2">AGENTIC ENGINE</text>
+<text x="416" y="151" text-anchor="middle" font-size="16" font-weight="800" fill="#f1f5f9">Canopy LLM Agent</text>
+<!-- subtitle pill -->
+<rect x="310" y="157" width="212" height="20" rx="10" fill="#2d1065" stroke="#4c1d95" stroke-width="1"/>
+<text x="416" y="171" text-anchor="middle" font-size="10" fill="#c4b5fd">4–8 LLM calls total  &#183;  never per-row</text>
+<line x1="282" y1="184" x2="550" y2="184" stroke="#2d1065" stroke-width="1"/>
+
+<!-- Step 1 -->
+<rect x="280" y="190" width="272" height="42" rx="7" fill="#1a0b3d"/>
+<circle cx="302" cy="211" r="10" fill="#7c3aed"/>
+<text x="302" y="215" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">1</text>
+<text x="320" y="206" font-size="12" font-weight="600" fill="#e2e8f0">Understand Source Data</text>
+<text x="320" y="223" font-size="10" fill="#7c6aab">Analyze semantics, types &amp; quality</text>
+
+<!-- Step 2 -->
+<rect x="280" y="236" width="272" height="42" rx="7" fill="#1a0b3d"/>
+<circle cx="302" cy="257" r="10" fill="#7c3aed"/>
+<text x="302" y="261" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">2</text>
+<text x="320" y="252" font-size="12" font-weight="600" fill="#e2e8f0">Inspect Target Schema</text>
+<text x="320" y="269" font-size="10" fill="#7c6aab">Read existing DB or propose new table</text>
+
+<!-- Step 3 — highlighted (the key step) -->
+<rect x="280" y="282" width="272" height="42" rx="7" fill="#2a1260" stroke="#7c3aed" stroke-width="1"/>
+<circle cx="302" cy="303" r="10" fill="#a78bfa"/>
+<text x="302" y="307" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">3</text>
+<text x="320" y="298" font-size="12" font-weight="700" fill="#c4b5fd">Generate Python Script</text>
+<text x="320" y="315" font-size="10" fill="#7c6aab">Write transform() function for your data</text>
+
+<!-- Step 4 -->
+<rect x="280" y="328" width="272" height="42" rx="7" fill="#1a0b3d"/>
+<circle cx="302" cy="349" r="10" fill="#7c3aed"/>
+<text x="302" y="353" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">4</text>
+<text x="320" y="344" font-size="12" font-weight="600" fill="#e2e8f0">Run on Sample &amp; Review</text>
+<text x="320" y="361" font-size="10" fill="#7c6aab">Execute script, capture output &amp; errors</text>
+
+<!-- Step 5 -->
+<rect x="280" y="374" width="272" height="42" rx="7" fill="#1a0b3d"/>
+<circle cx="302" cy="395" r="10" fill="#16a34a"/>
+<text x="302" y="399" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">&#10003;</text>
+<text x="320" y="390" font-size="12" font-weight="600" fill="#e2e8f0">Self-Correct &amp; Approve</text>
+<text x="320" y="407" font-size="10" fill="#7c6aab">Iterate up to 3&#215;, then execute on all data</text>
+
+<line x1="282" y1="424" x2="550" y2="424" stroke="#2d1065" stroke-width="1"/>
+
+<!-- footer -->
+<text x="416" y="443" text-anchor="middle" font-size="11" fill="#7c3aed" font-weight="600">Ollama (local) &#183; OpenAI &#183; Anthropic</text>
+<text x="416" y="462" text-anchor="middle" font-size="10" fill="#4b5563">&#128274; Only 50 sample rows sent to LLM &#183; zero per-row calls</text>
+<text x="416" y="480" text-anchor="middle" font-size="10" fill="#4b5563">canopy run pipeline.yaml</text>
+
+<!-- LLM provider badges -->
+<rect x="293" y="488" width="68" height="18" rx="5" fill="#1c0f38" stroke="#4c1d95" stroke-width="1"/>
+<text x="327" y="501" text-anchor="middle" font-size="9" fill="#a78bfa" font-weight="600">Ollama</text>
+<rect x="369" y="488" width="62" height="18" rx="5" fill="#1c0f38" stroke="#4c1d95" stroke-width="1"/>
+<text x="400" y="501" text-anchor="middle" font-size="9" fill="#a78bfa" font-weight="600">OpenAI</text>
+<rect x="439" y="488" width="74" height="18" rx="5" fill="#1c0f38" stroke="#4c1d95" stroke-width="1"/>
+<text x="476" y="501" text-anchor="middle" font-size="9" fill="#a78bfa" font-weight="600">Anthropic</text>
+
+<!-- ─── ARROW 2 ─── -->
+<line x1="569" y1="313" x2="596" y2="313" stroke="#374151" stroke-width="2"/>
+<polygon points="596,307 604,313 596,319" fill="#374151"/>
+<rect x="565" y="292" width="44" height="34" rx="5" fill="#111827" stroke="#1f2937" stroke-width="1"/>
+<text x="587" y="305" text-anchor="middle" font-size="8" fill="#64748b">script</text>
+<text x="587" y="317" text-anchor="middle" font-size="8" fill="#22c55e">saved</text>
+<text x="587" y="320" text-anchor="middle" font-size="7" fill="#374151">to disk</text>
+
+<!-- ════════════════════════════════ BOX 3 — GENERATED SCRIPT ════════════════════════════════ -->
+<rect x="608" y="108" width="232" height="410" rx="12" fill="#060f08" stroke="#14532d" stroke-width="1.5"/>
+<rect x="608" y="108" width="232" height="4" rx="2" fill="#22c55e"/>
+
+<!-- title -->
+<text x="724" y="129" text-anchor="middle" font-size="10" font-weight="700" fill="#4ade80" letter-spacing="1.5">GENERATED</text>
+<text x="724" y="150" text-anchor="middle" font-size="15" font-weight="700" fill="#f1f5f9">Conversion Script</text>
+<line x1="622" y1="160" x2="826" y2="160" stroke="#14532d" stroke-width="1"/>
+
+<!-- filename chip -->
+<rect x="618" y="165" width="212" height="18" rx="4" fill="#0d1f0e" stroke="#14532d" stroke-width="1"/>
+<text x="724" y="178" text-anchor="middle" font-size="9" fill="#4ade80" font-family="'SF Mono','Fira Code',Consolas,monospace">a3b7c2d1_convert.py</text>
+
+<!-- code block -->
+<rect x="618" y="186" width="212" height="256" rx="6" fill="#030a04"/>
+<text x="625" y="202" font-size="9.5" fill="#6b7280" font-family="'SF Mono','Fira Code',Consolas,monospace">from decimal import Decimal</text>
+<text x="625" y="217" font-size="9.5" fill="#6b7280" font-family="'SF Mono','Fira Code',Consolas,monospace">from datetime import date</text>
+<text x="625" y="237" font-size="9.5" fill="#86efac" font-family="'SF Mono','Fira Code',Consolas,monospace">def transform(row: dict)</text>
+<text x="625" y="252" font-size="9.5" fill="#86efac" font-family="'SF Mono','Fira Code',Consolas,monospace">        -&gt; dict | None:</text>
+<text x="625" y="272" font-size="9.5" fill="#e2e8f0" font-family="'SF Mono','Fira Code',Consolas,monospace">  salary = float(</text>
+<text x="625" y="287" font-size="9.5" fill="#e2e8f0" font-family="'SF Mono','Fira Code',Consolas,monospace">    row[&#34;Salary&#34;]</text>
+<text x="625" y="302" font-size="9.5" fill="#fca5a5" font-family="'SF Mono','Fira Code',Consolas,monospace">    .replace(&#34;$&#34;, &#34;&#34;)</text>
+<text x="625" y="317" font-size="9.5" fill="#fca5a5" font-family="'SF Mono','Fira Code',Consolas,monospace">    .replace(&#34;,&#34;, &#34;&#34;))</text>
+<text x="625" y="337" font-size="9.5" fill="#e2e8f0" font-family="'SF Mono','Fira Code',Consolas,monospace">  active = row[&#34;Active&#34;]</text>
+<text x="625" y="352" font-size="9.5" fill="#fca5a5" font-family="'SF Mono','Fira Code',Consolas,monospace">    .lower() in</text>
+<text x="625" y="367" font-size="9.5" fill="#fca5a5" font-family="'SF Mono','Fira Code',Consolas,monospace">    (&#34;yes&#34;,&#34;true&#34;,&#34;1&#34;)</text>
+<text x="625" y="387" font-size="9.5" fill="#e2e8f0" font-family="'SF Mono','Fira Code',Consolas,monospace">  return &#123;</text>
+<text x="625" y="402" font-size="9.5" fill="#e2e8f0" font-family="'SF Mono','Fira Code',Consolas,monospace">    &#34;salary&#34;: salary,</text>
+<text x="625" y="417" font-size="9.5" fill="#e2e8f0" font-family="'SF Mono','Fira Code',Consolas,monospace">    &#34;is_active&#34;: active,</text>
+<text x="625" y="432" font-size="9.5" fill="#4b5563" font-family="'SF Mono','Fira Code',Consolas,monospace">    ...&#125;</text>
+
+<line x1="622" y1="450" x2="826" y2="450" stroke="#14532d" stroke-width="1"/>
+
+<!-- features -->
+<text x="626" y="467" font-size="10.5" fill="#22c55e">&#10003; Saved to disk &amp; editable</text>
+<text x="626" y="484" font-size="10.5" fill="#22c55e">&#10003; Version-controlled in git</text>
+<text x="626" y="501" font-size="10.5" fill="#22c55e">&#10003; Re-run without any LLM</text>
+
+<!-- ─── ARROW 3 ─── -->
+<line x1="845" y1="313" x2="872" y2="313" stroke="#374151" stroke-width="2"/>
+<polygon points="872,307 880,313 872,319" fill="#374151"/>
+<rect x="840" y="296" width="40" height="28" rx="5" fill="#111827" stroke="#1f2937" stroke-width="1"/>
+<text x="860" y="307" text-anchor="middle" font-size="8" fill="#64748b">clean</text>
+<text x="860" y="319" text-anchor="middle" font-size="8" fill="#3b82f6">rows</text>
+
+<!-- ════════════════════════════════ BOX 4 — TARGET DB ════════════════════════════════ -->
+<rect x="884" y="108" width="296" height="410" rx="12" fill="#030b18" stroke="#1e3a5f" stroke-width="1.5"/>
+<rect x="884" y="108" width="296" height="4" rx="2" fill="#3b82f6"/>
+
+<!-- title -->
+<text x="1032" y="129" text-anchor="middle" font-size="10" font-weight="700" fill="#60a5fa" letter-spacing="1.5">OUTPUT</text>
+<text x="1032" y="150" text-anchor="middle" font-size="15" font-weight="700" fill="#f1f5f9">Clean Target DB</text>
+<line x1="898" y1="160" x2="1166" y2="160" stroke="#1e3a5f" stroke-width="1"/>
+
+<!-- DB table header -->
+<rect x="894" y="164" width="272" height="21" rx="3" fill="#0f2340"/>
+<text x="900" y="179" font-size="9" fill="#93c5fd" font-family="'SF Mono','Fira Code',Consolas,monospace">id  salary     is_active  hire_date</text>
+
+<!-- Rows — clean uniform data -->
+<rect x="894" y="186" width="272" height="20" fill="#081428"/>
+<text x="900" y="200" font-size="9" fill="#d1d5db" font-family="'SF Mono','Fira Code',Consolas,monospace">1   75000.00   true       2020-01-15</text>
+
+<rect x="894" y="207" width="272" height="20" fill="#060f1e"/>
+<text x="900" y="221" font-size="9" fill="#d1d5db" font-family="'SF Mono','Fira Code',Consolas,monospace">2   62000.00   true       2019-03-22</text>
+
+<rect x="894" y="228" width="272" height="20" fill="#081428"/>
+<text x="900" y="242" font-size="9" fill="#d1d5db" font-family="'SF Mono','Fira Code',Consolas,monospace">3   88500.00   true       2021-03-01</text>
+
+<rect x="894" y="249" width="272" height="20" fill="#060f1e"/>
+<text x="900" y="263" font-size="9" fill="#d1d5db" font-family="'SF Mono','Fira Code',Consolas,monospace">4   95000.00   false      2018-12-31</text>
+
+<rect x="894" y="270" width="272" height="20" fill="#081428"/>
+<text x="900" y="284" font-size="9" fill="#4b5563" font-family="'SF Mono','Fira Code',Consolas,monospace">5   45000.00   false      2022-06-15</text>
+
+<line x1="898" y1="300" x2="1166" y2="300" stroke="#1e3a5f" stroke-width="1"/>
+
+<!-- Checkmarks -->
+<text x="900" y="319" font-size="11" fill="#3b82f6">&#10003; Consistent types &amp; formats</text>
+<text x="900" y="337" font-size="11" fill="#3b82f6">&#10003; Schema auto-created if needed</text>
+<text x="900" y="355" font-size="11" fill="#3b82f6">&#10003; Streaming bulk inserts</text>
+<text x="900" y="373" font-size="11" fill="#3b82f6">&#10003; Handles 1 GB+ files</text>
+
+<line x1="898" y1="387" x2="1166" y2="387" stroke="#1e3a5f" stroke-width="1"/>
+
+<text x="900" y="404" font-size="10" fill="#475569">Target databases:</text>
+<rect x="900" y="410" width="82" height="18" rx="5" fill="#0f2340" stroke="#1e3a5f" stroke-width="1"/>
+<text x="941" y="423" text-anchor="middle" font-size="9" fill="#93c5fd" font-weight="600">PostgreSQL</text>
+<rect x="990" y="410" width="54" height="18" rx="5" fill="#0f2340" stroke="#1e3a5f" stroke-width="1"/>
+<text x="1017" y="423" text-anchor="middle" font-size="9" fill="#93c5fd" font-weight="600">MySQL</text>
+<rect x="1052" y="410" width="80" height="18" rx="5" fill="#0f2340" stroke="#1e3a5f" stroke-width="1"/>
+<text x="1092" y="423" text-anchor="middle" font-size="9" fill="#4b5563">+ more planned</text>
+
+<!-- Job summary card -->
+<rect x="894" y="436" width="272" height="62" rx="8" fill="#060e1c" stroke="#1e3a5f" stroke-width="1"/>
+<text x="900" y="453" font-size="9" fill="#4b5563" font-family="monospace">Job: a3b7c2d1  &#183;  3 review iterations</text>
+<text x="900" y="469" font-size="10" fill="#4ade80" font-family="monospace">&#10003;  1,000 rows loaded successfully</text>
+<text x="900" y="485" font-size="10" fill="#fbbf24" font-family="monospace">&#9650;  3 rows flagged for review</text>
+<text x="900" y="501" font-size="9" fill="#4b5563" font-family="monospace">Duration: 4.2s  (excl. LLM inference)</text>
+
+<!-- ════════════════════════════════ FOOTER FEATURES ════════════════════════════════ -->
+<line x1="0" y1="534" x2="1200" y2="534" stroke="#161d2e" stroke-width="1.5"/>
+
+<!-- Pill 1 -->
+<rect x="20"  y="548" width="272" height="68" rx="10" fill="#0d1117" stroke="#1e2733" stroke-width="1"/>
+<text x="50"  y="575" font-size="22">&#9889;</text>
+<text x="80"  y="572" font-size="13" font-weight="700" fill="#f1f5f9">Token Efficient</text>
+<text x="80"  y="588" font-size="10" fill="#4b5563">4–8 LLM calls total, not per-row.</text>
+<text x="80"  y="603" font-size="10" fill="#4b5563">Scales to millions of rows cheaply.</text>
+
+<!-- Pill 2 -->
+<rect x="306" y="548" width="272" height="68" rx="10" fill="#0d1117" stroke="#1e2733" stroke-width="1"/>
+<text x="336" y="575" font-size="22">&#128196;</text>
+<text x="366" y="572" font-size="13" font-weight="700" fill="#f1f5f9">Fully Transparent</text>
+<text x="366" y="588" font-size="10" fill="#4b5563">Scripts saved to disk. Inspect, edit</text>
+<text x="366" y="603" font-size="10" fill="#4b5563">&amp; version-control your transforms.</text>
+
+<!-- Pill 3 -->
+<rect x="592" y="548" width="272" height="68" rx="10" fill="#0d1117" stroke="#1e2733" stroke-width="1"/>
+<text x="622" y="575" font-size="22">&#128268;</text>
+<text x="652" y="572" font-size="13" font-weight="700" fill="#f1f5f9">Plugin Architecture</text>
+<text x="652" y="588" font-size="10" fill="#4b5563">Add sources, targets &amp; LLM providers</text>
+<text x="652" y="603" font-size="10" fill="#4b5563">by implementing a simple ABC.</text>
+
+<!-- Pill 4 -->
+<rect x="878" y="548" width="302" height="68" rx="10" fill="#0d1117" stroke="#1e2733" stroke-width="1"/>
+<text x="908" y="575" font-size="22">&#128274;</text>
+<text x="938" y="572" font-size="13" font-weight="700" fill="#f1f5f9">Privacy First</text>
+<text x="938" y="588" font-size="10" fill="#4b5563">Run fully local with Ollama. Only 50</text>
+<text x="938" y="603" font-size="10" fill="#4b5563">sample rows ever leave your machine.</text>
+
+<!-- ─── BOTTOM BAR ─── -->
+<rect x="0" y="628" width="1200" height="52" fill="#06080f"/>
+<line x1="0" y1="628" x2="1200" y2="628" stroke="#161d2e" stroke-width="1"/>
+<text x="600" y="650" text-anchor="middle" font-size="12" fill="#374151" font-weight="600">github.com/codekotadiya/Canopy</text>
+<text x="600" y="668" text-anchor="middle" font-size="10" fill="#1f2937">Built with Ollama &#183; PostgreSQL &#183; SQLAlchemy &#183; Pydantic &#183; Typer  &#183;  Python 3.11+</text>
+
+</svg>

@@ -2,8 +2,9 @@
 
 *Understands your data. Not just moves it.*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+
+![Canopy overview](assets/overview.svg)
 
 Canopy is an open-source, AI-powered data normalization pipeline. It reads messy data from any source, uses an LLM to understand the schema and generate a deterministic Python conversion script, then runs that script across your full dataset and loads clean data into your database.
 
