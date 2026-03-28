@@ -1,0 +1,27 @@
+name: employees_normalization
+
+source:
+  type: csv
+  path: ./examples/sample_employees.csv
+  delimiter: ","
+  encoding: utf-8
+  sample_size: 15
+
+target:
+  type: postgres
+  connection_string: postgresql://${DB_USER}:${DB_PASSWORD}@localhost:5432/canopy
+  table_name: employees
+  create_if_missing: true
+
+llm:
+  provider: ollama
+  model: llama3
+  base_url: http://localhost:11434
+  temperature: 0.1
+  timeout: 120
+
+script:
+  output_dir: ./scripts
+  max_review_iterations: 3
+
+chunk_size: 1000
