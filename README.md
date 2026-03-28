@@ -174,7 +174,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for step-by-step instructions and referen
 |-------|-----------|---------|
 | **Sources** | CSV | JSON, XML, SQL databases, PDF, DOCX |
 | **LLM Providers** | Ollama (local) | OpenAI, Anthropic |
-| **Targets** | PostgreSQL | MySQL, SQLite, Snowflake, BigQuery |
+| **Targets** | PostgreSQL, SQLite | MySQL, Snowflake, BigQuery |
 
 ## Contributing
 
@@ -183,6 +183,20 @@ We welcome contributions! Whether it's a bug report, a new connector, or an impr
 - Read the [Contributing Guide](CONTRIBUTING.md)
 - Look for [`good first issue`](../../labels/good%20first%20issue) labels
 - Join the discussion in [Issues](../../issues)
+
+## Security
+
+Canopy generates and executes Python code produced by an LLM. The following safeguards are in place:
+
+- **AST validation** — Generated scripts are parsed and checked for dangerous imports, blocked builtins (`eval`, `exec`, `open`, …), and suspicious attribute access *before* any execution.
+- **Subprocess isolation** — Scripts run in a separate subprocess with a minimal environment (no inherited secrets), a timeout, and restricted `PATH`.
+- **Strict review gate** — The LLM review step is fail-closed: if the review response cannot be parsed, the script is **rejected** (not approved). Unapproved scripts are never executed on the full dataset.
+- **Row-level fallback** — If a batch insert fails, the loader retries row-by-row and quarantines failing rows instead of aborting the entire job.
+
+**Current limitations:**
+- Scripts are not yet executed in a container or full OS-level sandbox. The subprocess shares the host filesystem.
+- The import allow-list covers common data-processing modules. If your transforms need additional libraries, extend `ALLOWED_MODULES` in `canopy/core/script_gen/validator.py`.
+- Do not use Canopy with untrusted prompt sources in an unsupervised environment.
 
 ## Privacy
 

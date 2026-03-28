@@ -75,6 +75,7 @@ class PostgresLoader(BaseLoader):
         self._inspector = SchemaInspector(self._engine)
         self._rows_loaded = 0
         self._rows_failed = 0
+        self._quarantined: list[dict[str, Any]] = []
         self._start_time = time.monotonic()
 
     def get_target_schema(self, table_name: str) -> TargetSchema | None:
@@ -105,14 +106,29 @@ class PostgresLoader(BaseLoader):
             return 0
 
         table = sa.Table(table_name, self._metadata, autoload_with=self._engine)
-        with self._engine.begin() as conn:
-            try:
+
+        # Try the fast path: insert the whole batch in one transaction.
+        try:
+            with self._engine.begin() as conn:
                 conn.execute(table.insert(), rows)
-                self._rows_loaded += len(rows)
-                return len(rows)
+            self._rows_loaded += len(rows)
+            return len(rows)
+        except Exception:
+            pass  # Fall through to row-level fallback
+
+        # Fallback: insert rows individually so one bad row doesn't lose the batch.
+        loaded = 0
+        for row in rows:
+            try:
+                with self._engine.begin() as conn:
+                    conn.execute(table.insert(), [row])
+                loaded += 1
             except Exception:
-                self._rows_failed += len(rows)
-                raise
+                self._rows_failed += 1
+                self._quarantined.append(row)
+
+        self._rows_loaded += loaded
+        return loaded
 
     def finalize(self) -> LoadSummary:
         duration = time.monotonic() - self._start_time

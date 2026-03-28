@@ -22,6 +22,7 @@ from canopy.core.context.prompts import (
 )
 from canopy.core.script_gen.generator import ScriptGenerator, extract_python_code
 from canopy.core.script_gen.runner import ScriptRunner
+from canopy.core.script_gen.validator import validate_script
 from canopy.models.analysis import FieldMapping, SchemaProposal
 from canopy.models.config import PipelineConfig
 from canopy.models.execution import JobSummary
@@ -112,6 +113,14 @@ class ContextEngine:
             script_text = self.llm.complete(gen_prompt, system=SYSTEM_PROMPT)
             script_code = extract_python_code(script_text)
 
+            # Validate the raw LLM-generated code before saving
+            validation = validate_script(script_code)
+            if not validation.valid:
+                raise CanopyError(
+                    f"Generated script failed AST validation: "
+                    f"{'; '.join(validation.errors)}"
+                )
+
             output_dir = Path(self.config.script.output_dir)
             script_path = self.generator.save_script(
                 script_code,
@@ -124,6 +133,7 @@ class ContextEngine:
 
             # === Steps 4-5: Review Loop ===
             review_iterations = 0
+            script_approved = False
             for iteration in range(self.config.script.max_review_iterations):
                 review_iterations = iteration + 1
                 log_fn(f"[Step 5/6] Review iteration {review_iterations}...")
@@ -137,6 +147,7 @@ class ContextEngine:
                 verdict = parse_review_verdict(review_text)
 
                 if verdict.get("approved", False) and result.success:
+                    script_approved = True
                     log_fn(f"  Script approved after {review_iterations} iteration(s)")
                     break
 
@@ -164,6 +175,12 @@ class ContextEngine:
                     f"Max review iterations ({self.config.script.max_review_iterations}) reached"
                 )
 
+            if not script_approved:
+                raise CanopyError(
+                    "Script was not approved after review. "
+                    "Refusing to execute unapproved script on full dataset."
+                )
+
             # === Step 6: Full Execution ===
             log_fn(f"[Step 6/6] Executing on full dataset...")
             total_source = 0
@@ -180,10 +197,15 @@ class ContextEngine:
                     errors.extend(result.errors[:10])  # cap error logging
 
                 if result.output_rows:
-                    loaded = self.loader.load_batch(
-                        self.config.target.table_name, result.output_rows
-                    )
-                    total_loaded += loaded
+                    try:
+                        loaded = self.loader.load_batch(
+                            self.config.target.table_name, result.output_rows
+                        )
+                        total_loaded += loaded
+                    except Exception as load_exc:
+                        load_err = f"Loader error: {type(load_exc).__name__}: {load_exc}"
+                        errors.append(load_err)
+                        total_failed += len(result.output_rows)
 
             load_summary = self.loader.finalize()
             duration = time.monotonic() - start_time

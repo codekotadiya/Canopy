@@ -27,7 +27,10 @@ class CsvConnector(BaseConnector):
             return self._columns
         with self._open() as f:
             reader = csv.reader(f, delimiter=self.delimiter)
-            self._columns = next(reader)
+            try:
+                self._columns = next(reader)
+            except StopIteration:
+                raise ValueError(f"CSV file is empty (no header row): {self.path}")
         return self._columns
 
     def read_sample(self, n: int = 50) -> list[dict[str, str]]:

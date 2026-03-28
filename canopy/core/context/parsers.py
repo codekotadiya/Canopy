@@ -78,5 +78,6 @@ def parse_review_verdict(text: str) -> dict[str, Any]:
     if "```python" in text:
         return {"approved": False, "issues": ["LLM provided corrected code"]}
 
-    # Default: assume approved if no clear signal
-    return {"approved": True, "notes": "Could not parse review verdict, assuming approved"}
+    # Fail-closed: if we cannot parse the review, reject the script.
+    # A gatekeeper step must never default to approval on ambiguous input.
+    return {"approved": False, "notes": "Could not parse review verdict, defaulting to rejected"}
