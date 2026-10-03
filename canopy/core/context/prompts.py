@@ -15,9 +15,7 @@ SYSTEM_PROMPT = (
 )
 
 
-def build_understand_source_prompt(
-    columns: list[str], sample_rows: list[dict[str, str]]
-) -> str:
+def build_understand_source_prompt(columns: list[str], sample_rows: list[dict[str, str]]) -> str:
     rows_json = json.dumps(sample_rows[:20], indent=2)
     return f"""Analyze this dataset sample. Here are the column names:
 {json.dumps(columns)}

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 from canopy.core.loader.postgres import PostgresLoader
 from canopy.models.schema import ColumnSchema, TargetSchema
 

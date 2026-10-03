@@ -15,13 +15,13 @@ class TestScriptRunner:
     def test_successful_transform(self, tmp_path: Path):
         script = _write_script(
             tmp_path,
-            '''
+            """
 def transform(row):
     return {"name": row["Full Name"].strip(), "active": row["Active"].lower() == "yes"}
 
 def validate(row):
     return []
-''',
+""",
         )
         runner = ScriptRunner()
         result = runner.run_on_sample(
@@ -37,10 +37,10 @@ def validate(row):
     def test_transform_with_errors(self, tmp_path: Path):
         script = _write_script(
             tmp_path,
-            '''
+            """
 def transform(row):
     return {"value": int(row["amount"])}
-''',
+""",
         )
         runner = ScriptRunner()
         result = runner.run_on_sample(
@@ -56,12 +56,12 @@ def transform(row):
     def test_transform_returns_none_filters_row(self, tmp_path: Path):
         script = _write_script(
             tmp_path,
-            '''
+            """
 def transform(row):
     if row["skip"] == "yes":
         return None
     return row
-''',
+""",
         )
         runner = ScriptRunner()
         result = runner.run_on_sample(
@@ -95,7 +95,7 @@ def transform(row):
     def test_blocked_import_rejected(self, tmp_path: Path):
         script = _write_script(
             tmp_path,
-            'import os\ndef transform(row):\n    return row\n',
+            "import os\ndef transform(row):\n    return row\n",
         )
         runner = ScriptRunner()
         result = runner.run_on_sample(script, [{"a": "1"}])

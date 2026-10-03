@@ -14,7 +14,6 @@ from canopy.models.analysis import (
 )
 from canopy.models.schema import ColumnSchema, TargetSchema
 
-
 SAMPLE_CSV_ROWS = [
     {
         "Full Name": "John Smith",

@@ -122,8 +122,7 @@ class ContextEngine:
             validation = validate_script(script_code)
             if not validation.valid:
                 raise CanopyError(
-                    f"Generated script failed AST validation: "
-                    f"{'; '.join(validation.errors)}"
+                    f"Generated script failed AST validation: {'; '.join(validation.errors)}"
                 )
 
             output_dir = Path(self.config.script.output_dir)
@@ -207,7 +206,7 @@ class ContextEngine:
                             self.config.target.table_name, result.output_rows
                         )
                         total_loaded += loaded
-                    except Exception as load_exc:
+                    except Exception as load_exc:  # noqa: BLE001 — isolate loader failures
                         load_err = f"Loader error: {type(load_exc).__name__}: {load_exc}"
                         errors.append(load_err)
                         total_failed += len(result.output_rows)
@@ -221,10 +220,7 @@ class ContextEngine:
             if total_loaded == 0 and total_source > 0:
                 status = "failed"
 
-            log_fn(
-                f"  Done: {total_loaded} loaded, {total_failed} failed, "
-                f"{duration:.1f}s total"
-            )
+            log_fn(f"  Done: {total_loaded} loaded, {total_failed} failed, {duration:.1f}s total")
 
             return JobSummary(
                 job_id=job_id,
@@ -241,7 +237,7 @@ class ContextEngine:
                 errors=errors,
             )
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 — a job failure returns a summary
             duration = time.monotonic() - start_time
             return JobSummary(
                 job_id=job_id,

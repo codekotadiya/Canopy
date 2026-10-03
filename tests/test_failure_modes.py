@@ -26,7 +26,6 @@ from canopy.models.config import (
 )
 from canopy.models.schema import ColumnSchema, TargetSchema
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -65,10 +64,10 @@ INSPECT_RESPONSE = json.dumps(
     }
 )
 
-GOOD_SCRIPT = '''```python
+GOOD_SCRIPT = """```python
 def transform(row: dict) -> dict | None:
     return {"name": row.get("Name", "").strip() or None}
-```'''
+```"""
 
 REVIEW_APPROVED = json.dumps({"approved": True, "notes": "Looks good"})
 REVIEW_REJECTED = json.dumps({"approved": False, "issues": ["bad output"]})
@@ -119,18 +118,21 @@ def _write_csv(tmp_path: Path, content: str = "Name\nAlice\nBob\n") -> Path:
 # 1. Unapproved script blocks full execution
 # ---------------------------------------------------------------------------
 
+
 class TestUnapprovedScriptBlocking:
     def test_unapproved_script_fails_job(self, tmp_path: Path):
         csv_path = _write_csv(tmp_path)
         config = _make_config(csv_path, tmp_path / "scripts")
         engine = ContextEngine(config)
         # Review always rejects, no revised code → should fail
-        engine.llm = FakeLLM([
-            UNDERSTAND_RESPONSE,
-            INSPECT_RESPONSE,
-            GOOD_SCRIPT,
-            REVIEW_REJECTED,
-        ])
+        engine.llm = FakeLLM(
+            [
+                UNDERSTAND_RESPONSE,
+                INSPECT_RESPONSE,
+                GOOD_SCRIPT,
+                REVIEW_REJECTED,
+            ]
+        )
         summary = engine.run(log_fn=lambda _: None)
         assert summary.status == "failed"
         assert any("not approved" in e.lower() for e in summary.errors)
@@ -140,21 +142,23 @@ class TestUnapprovedScriptBlocking:
         config = _make_config(csv_path, tmp_path / "scripts")
         engine = ContextEngine(config)
         # Review always rejects but provides new code each time
-        revision1 = '''```python
+        revision1 = """```python
 def transform(row: dict) -> dict | None:
     return {"name": row.get("Name", "")}
-```'''
-        revision2 = '''```python
+```"""
+        revision2 = """```python
 def transform(row: dict) -> dict | None:
     return {"name": row.get("Name", "").upper()}
-```'''
-        engine.llm = FakeLLM([
-            UNDERSTAND_RESPONSE,
-            INSPECT_RESPONSE,
-            GOOD_SCRIPT,
-            revision1,    # review 1 rejects with new code
-            revision2,    # review 2 rejects with new code (max_review_iterations=2)
-        ])
+```"""
+        engine.llm = FakeLLM(
+            [
+                UNDERSTAND_RESPONSE,
+                INSPECT_RESPONSE,
+                GOOD_SCRIPT,
+                revision1,  # review 1 rejects with new code
+                revision2,  # review 2 rejects with new code (max_review_iterations=2)
+            ]
+        )
         summary = engine.run(log_fn=lambda _: None)
         assert summary.status == "failed"
         assert any("not approved" in e.lower() for e in summary.errors)
@@ -163,6 +167,7 @@ def transform(row: dict) -> dict | None:
 # ---------------------------------------------------------------------------
 # 2. Review parser fail-closed
 # ---------------------------------------------------------------------------
+
 
 class TestReviewParserFailClosed:
     def test_malformed_json_defaults_to_rejected(self):
@@ -178,7 +183,9 @@ class TestReviewParserFailClosed:
         assert verdict["approved"] is False
 
     def test_python_code_in_response_means_rejected(self):
-        verdict = parse_review_verdict("Here is the fix:\n```python\ndef transform(row):\n    return row\n```")
+        verdict = parse_review_verdict(
+            "Here is the fix:\n```python\ndef transform(row):\n    return row\n```"
+        )
         assert verdict["approved"] is False
 
     def test_valid_approval_is_accepted(self):
@@ -189,6 +196,7 @@ class TestReviewParserFailClosed:
 # ---------------------------------------------------------------------------
 # 3. CSV empty file handling
 # ---------------------------------------------------------------------------
+
 
 class TestCsvEmptyFile:
     def test_empty_csv_raises_on_get_columns(self, tmp_path: Path):
@@ -209,6 +217,7 @@ class TestCsvEmptyFile:
 # ---------------------------------------------------------------------------
 # 4. Loader row-level fallback
 # ---------------------------------------------------------------------------
+
 
 class TestLoaderRowFallback:
     def test_batch_with_bad_row_partially_succeeds(self):
@@ -259,6 +268,7 @@ class TestLoaderRowFallback:
 # ---------------------------------------------------------------------------
 # 5. AST validation edge cases
 # ---------------------------------------------------------------------------
+
 
 class TestASTValidationEdgeCases:
     def test_nested_dangerous_import(self):
@@ -316,18 +326,21 @@ class TestASTValidationEdgeCases:
 # 6. Engine handles loader exceptions per chunk
 # ---------------------------------------------------------------------------
 
+
 class TestEngineLoaderExceptionHandling:
     def test_loader_exception_does_not_crash_pipeline(self, tmp_path: Path):
         csv_path = _write_csv(tmp_path, "Name\nAlice\nBob\nCharlie\n")
         config = _make_config(csv_path, tmp_path / "scripts")
         config = config.model_copy(update={"chunk_size": 1})  # one row per chunk
         engine = ContextEngine(config)
-        engine.llm = FakeLLM([
-            UNDERSTAND_RESPONSE,
-            INSPECT_RESPONSE,
-            GOOD_SCRIPT,
-            REVIEW_APPROVED,
-        ])
+        engine.llm = FakeLLM(
+            [
+                UNDERSTAND_RESPONSE,
+                INSPECT_RESPONSE,
+                GOOD_SCRIPT,
+                REVIEW_APPROVED,
+            ]
+        )
 
         # Sabotage the loader to fail on the second call
         original_load_batch = engine.loader.load_batch

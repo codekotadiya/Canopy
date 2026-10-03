@@ -113,7 +113,7 @@ class PostgresLoader(BaseLoader):
                 conn.execute(table.insert(), rows)
             self._rows_loaded += len(rows)
             return len(rows)
-        except Exception:
+        except Exception:  # noqa: BLE001, S110 — one bad batch falls through to row inserts
             pass  # Fall through to row-level fallback
 
         # Fallback: insert rows individually so one bad row doesn't lose the batch.
@@ -123,7 +123,7 @@ class PostgresLoader(BaseLoader):
                 with self._engine.begin() as conn:
                     conn.execute(table.insert(), [row])
                 loaded += 1
-            except Exception:
+            except Exception:  # noqa: BLE001 — quarantine the row and continue
                 self._rows_failed += 1
                 self._quarantined.append(row)
 

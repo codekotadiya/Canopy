@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 from canopy.core.context.engine import ContextEngine
 from canopy.models.config import (
     LLMConfig,
@@ -14,7 +13,6 @@ from canopy.models.config import (
     SourceConfig,
     TargetConfig,
 )
-
 
 # Canned LLM responses keyed by step detection
 UNDERSTAND_RESPONSE = json.dumps(
@@ -118,7 +116,7 @@ INSPECT_RESPONSE = json.dumps(
     }
 )
 
-GENERATE_RESPONSE = '''```python
+GENERATE_RESPONSE = """```python
 def transform(row: dict) -> dict | None:
     full_name = row.get("Full Name", "").strip() or None
     email = row.get("Email", "").strip().lower() or None
@@ -148,7 +146,7 @@ def validate(row: dict) -> list[str]:
     if not row.get("full_name") and not row.get("email"):
         warnings.append("Both name and email are empty")
     return warnings
-```'''
+```"""
 
 REVIEW_APPROVED = json.dumps({"approved": True, "notes": "Output looks correct"})
 
@@ -191,12 +189,14 @@ class TestContextEngine:
         config = self._make_config(sample_csv_path, tmp_path / "scripts")
         engine = ContextEngine(config)
 
-        fake_llm = FakeLLM([
-            UNDERSTAND_RESPONSE,
-            INSPECT_RESPONSE,
-            GENERATE_RESPONSE,
-            REVIEW_APPROVED,
-        ])
+        fake_llm = FakeLLM(
+            [
+                UNDERSTAND_RESPONSE,
+                INSPECT_RESPONSE,
+                GENERATE_RESPONSE,
+                REVIEW_APPROVED,
+            ]
+        )
         engine.llm = fake_llm
 
         logs: list[str] = []
@@ -214,12 +214,14 @@ class TestContextEngine:
         config = self._make_config(sample_csv_path, tmp_path / "scripts")
         engine = ContextEngine(config)
 
-        engine.llm = FakeLLM([
-            UNDERSTAND_RESPONSE,
-            INSPECT_RESPONSE,
-            GENERATE_RESPONSE,
-            REVIEW_APPROVED,
-        ])
+        engine.llm = FakeLLM(
+            [
+                UNDERSTAND_RESPONSE,
+                INSPECT_RESPONSE,
+                GENERATE_RESPONSE,
+                REVIEW_APPROVED,
+            ]
+        )
 
         summary = engine.run(log_fn=lambda _: None)
         script_path = Path(summary.script_path)
@@ -230,22 +232,24 @@ class TestContextEngine:
 
     def test_pipeline_review_iteration(self, sample_csv_path: Path, tmp_path: Path):
         """Test that the engine iterates when the review rejects the first script."""
-        buggy_script = '''```python
+        buggy_script = """```python
 def transform(row: dict) -> dict | None:
     # Buggy: will crash on empty salary
     return {"salary": float(row["Salary"])}
-```'''
+```"""
 
         config = self._make_config(sample_csv_path, tmp_path / "scripts")
         engine = ContextEngine(config)
 
-        engine.llm = FakeLLM([
-            UNDERSTAND_RESPONSE,
-            INSPECT_RESPONSE,
-            buggy_script,        # first script (will have errors)
-            GENERATE_RESPONSE,   # review returns corrected code
-            REVIEW_APPROVED,     # second review approves
-        ])
+        engine.llm = FakeLLM(
+            [
+                UNDERSTAND_RESPONSE,
+                INSPECT_RESPONSE,
+                buggy_script,  # first script (will have errors)
+                GENERATE_RESPONSE,  # review returns corrected code
+                REVIEW_APPROVED,  # second review approves
+            ]
+        )
 
         summary = engine.run(log_fn=lambda _: None)
         # Should have iterated at least once
@@ -253,9 +257,7 @@ def transform(row: dict) -> dict | None:
 
     def test_pipeline_error_handling(self, tmp_path: Path):
         """Test graceful failure when source file doesn't exist."""
-        config = self._make_config(
-            tmp_path / "nonexistent.csv", tmp_path / "scripts"
-        )
+        config = self._make_config(tmp_path / "nonexistent.csv", tmp_path / "scripts")
         engine = ContextEngine(config)
         engine.llm = FakeLLM([UNDERSTAND_RESPONSE])
 

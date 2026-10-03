@@ -24,6 +24,7 @@ def _docker_available() -> bool:
             ["docker", "info"],
             capture_output=True,
             timeout=10,
+            check=False,
         )
         return proc.returncode == 0
     except (subprocess.TimeoutExpired, OSError):
@@ -117,9 +118,7 @@ class ScriptRunner:
         """Run the script's transform() on sample rows in a subprocess."""
         return self._run(script_path, sample_rows)
 
-    def run_on_batch(
-        self, script_path: Path, rows: list[dict[str, str]]
-    ) -> ScriptExecutionResult:
+    def run_on_batch(self, script_path: Path, rows: list[dict[str, str]]) -> ScriptExecutionResult:
         """Run transform on a batch during full execution."""
         return self._run(script_path, rows)
 
@@ -127,9 +126,7 @@ class ScriptRunner:
     # Internal
     # ------------------------------------------------------------------
 
-    def _run(
-        self, script_path: Path, rows: list[dict[str, str]]
-    ) -> ScriptExecutionResult:
+    def _run(self, script_path: Path, rows: list[dict[str, str]]) -> ScriptExecutionResult:
         # --- AST validation before execution ---
         try:
             code = script_path.read_text(encoding="utf-8")
@@ -152,15 +149,9 @@ class ScriptRunner:
         rows_path = out_path = harness_path = ""
         try:
             with (
-                tempfile.NamedTemporaryFile(
-                    mode="w", suffix=".json", delete=False
-                ) as rows_file,
-                tempfile.NamedTemporaryFile(
-                    mode="w", suffix=".json", delete=False
-                ) as out_file,
-                tempfile.NamedTemporaryFile(
-                    mode="w", suffix=".py", delete=False
-                ) as harness_file,
+                tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as rows_file,
+                tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as out_file,
+                tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as harness_file,
             ):
                 rows_path = rows_file.name
                 out_path = out_file.name
@@ -176,27 +167,37 @@ class ScriptRunner:
                 Path(harness_path).write_text(harness_code, encoding="utf-8")
                 proc = subprocess.run(
                     [
-                        "docker", "run", "--rm",
-                        "--network", "none",
-                        "--memory", "256m",
-                        "--cpus", "1",
+                        "docker",
+                        "run",
+                        "--rm",
+                        "--network",
+                        "none",
+                        "--memory",
+                        "256m",
+                        "--cpus",
+                        "1",
                         "--read-only",
-                        "--tmpfs", "/tmp",
-                        "-v", f"{script_path}:/work/script.py:ro",
-                        "-v", f"{rows_path}:/work/rows.json:ro",
-                        "-v", f"{harness_path}:/work/harness.py:ro",
-                        "-v", f"{out_path}:/work/output.json",
+                        "--tmpfs",
+                        "/tmp",
+                        "-v",
+                        f"{script_path}:/work/script.py:ro",
+                        "-v",
+                        f"{rows_path}:/work/rows.json:ro",
+                        "-v",
+                        f"{harness_path}:/work/harness.py:ro",
+                        "-v",
+                        f"{out_path}:/work/output.json",
                         self.docker_image,
-                        "python", "/work/harness.py",
+                        "python",
+                        "/work/harness.py",
                     ],
                     capture_output=True,
                     text=True,
                     timeout=self.timeout,
+                    check=False,
                 )
             else:
-                harness_code = _build_harness(
-                    str(script_path), rows_path, out_path
-                )
+                harness_code = _build_harness(str(script_path), rows_path, out_path)
                 Path(harness_path).write_text(harness_code, encoding="utf-8")
                 proc = subprocess.run(
                     [sys.executable, harness_path],
@@ -206,6 +207,7 @@ class ScriptRunner:
                     # Do not inherit the parent's environment wholesale — pass a
                     # minimal env so the subprocess cannot read secrets etc.
                     env={"PATH": "", "PYTHONPATH": "", "HOME": ""},
+                    check=False,
                 )
 
             if proc.returncode != 0:
@@ -216,9 +218,7 @@ class ScriptRunner:
                     row_count_in=len(rows),
                 )
 
-            result_data: dict[str, Any] = json.loads(
-                Path(out_path).read_text(encoding="utf-8")
-            )
+            result_data: dict[str, Any] = json.loads(Path(out_path).read_text(encoding="utf-8"))
             output_rows = result_data.get("output", [])
             errors = result_data.get("errors", [])
 
@@ -236,7 +236,7 @@ class ScriptRunner:
                 errors=[f"Script execution timed out after {self.timeout}s"],
                 row_count_in=len(rows),
             )
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 — runner errors become a failed result
             return ScriptExecutionResult(
                 success=False,
                 errors=[f"Runner error: {type(exc).__name__}: {exc}"],

@@ -3,6 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+import yaml
+from pydantic import ValidationError
 
 from canopy.config.loader import load_config
 from canopy.models.config import PipelineConfig
@@ -93,7 +95,7 @@ target:
 
     def test_invalid_yaml_raises(self, tmp_path: Path):
         config_path = _write_config(tmp_path, "- - - not: valid: yaml: [")
-        with pytest.raises(Exception):
+        with pytest.raises(yaml.YAMLError):
             load_config(config_path)
 
     def test_missing_required_fields_raises(self, tmp_path: Path):
@@ -105,5 +107,5 @@ source:
   type: csv
 """,
         )
-        with pytest.raises(Exception):
+        with pytest.raises(ValidationError):
             load_config(config_path)

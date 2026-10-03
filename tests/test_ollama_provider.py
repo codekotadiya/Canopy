@@ -17,9 +17,7 @@ class TestOllamaProvider:
     @respx.mock
     def test_complete_success(self, provider: OllamaProvider):
         respx.post("http://localhost:11434/api/generate").mock(
-            return_value=httpx.Response(
-                200, json={"response": '{"columns": []}', "done": True}
-            )
+            return_value=httpx.Response(200, json={"response": '{"columns": []}', "done": True})
         )
         result = provider.complete("test prompt")
         assert result == '{"columns": []}'
@@ -52,9 +50,7 @@ class TestOllamaProvider:
 
     @respx.mock
     def test_health_check_unreachable(self, provider: OllamaProvider):
-        respx.get("http://localhost:11434/api/tags").mock(
-            side_effect=httpx.ConnectError("refused")
-        )
+        respx.get("http://localhost:11434/api/tags").mock(side_effect=httpx.ConnectError("refused"))
         assert provider.health_check() is False
 
     def test_is_cloud_returns_false(self, provider: OllamaProvider):

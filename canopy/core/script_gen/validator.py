@@ -97,9 +97,7 @@ def validate_script(code: str) -> ValidationResult:
             args = node.args
             # Must accept at least one positional arg (the row)
             if len(args.args) < 1:
-                errors.append(
-                    "transform() must accept at least one argument (row)"
-                )
+                errors.append("transform() must accept at least one argument (row)")
             has_transform = True
             break
 
@@ -126,9 +124,8 @@ def validate_script(code: str) -> ValidationResult:
                 errors.append(f"Blocked attribute access: .{func.attr}")
 
         # Check bare attribute access (not just in calls)
-        elif isinstance(node, ast.Attribute):
-            if node.attr in BLOCKED_ATTRIBUTES:
-                errors.append(f"Blocked attribute access: .{node.attr}")
+        elif isinstance(node, ast.Attribute) and node.attr in BLOCKED_ATTRIBUTES:
+            errors.append(f"Blocked attribute access: .{node.attr}")
 
     return ValidationResult(valid=len(errors) == 0, errors=errors)
 
@@ -137,4 +134,6 @@ def _check_module(module_name: str, errors: list[str]) -> None:
     """Verify a module import is on the allow-list."""
     top_level = module_name.split(".")[0]
     if top_level not in ALLOWED_MODULES:
-        errors.append(f"Blocked import: {module_name} (allowed: {', '.join(sorted(ALLOWED_MODULES))})")
+        errors.append(
+            f"Blocked import: {module_name} (allowed: {', '.join(sorted(ALLOWED_MODULES))})"
+        )

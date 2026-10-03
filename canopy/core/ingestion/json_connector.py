@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterator
 from pathlib import Path
-from typing import IO, Any, Iterator
+from typing import IO, Any
 
 from canopy.core.ingestion.base import BaseConnector
 from canopy.models.config import SourceConfig
@@ -52,22 +53,19 @@ class JsonConnector(BaseConnector):
                 try:
                     raw.append(json.loads(line))
                 except json.JSONDecodeError as exc:
-                    raise ValueError(
-                        f"Invalid JSON on line {i} of {self.path}: {exc}"
-                    ) from exc
+                    raise ValueError(f"Invalid JSON on line {i} of {self.path}: {exc}") from exc
 
         if not raw:
             raise ValueError(f"JSON file contains no records: {self.path}")
 
         if not isinstance(raw[0], dict):
-            raise ValueError(
+            raise ValueError(  # noqa: TRY004 — callers and tests expect ValueError
                 f"Expected array of objects, got array of {type(raw[0]).__name__}"
             )
 
         # Stringify all values to match CSV connector output format
         self._records = [
-            {k: str(v) if v is not None else "" for k, v in record.items()}
-            for record in raw
+            {k: str(v) if v is not None else "" for k, v in record.items()} for record in raw
         ]
 
         return self._records

@@ -10,7 +10,6 @@ import yaml
 
 from canopy.models.config import PipelineConfig
 
-
 _ENV_VAR_PATTERN = re.compile(r"\$\{(\w+)\}")
 
 
@@ -35,7 +34,9 @@ def _interpolate_env_vars(raw: str) -> str:
     # Parse YAML first, then interpolate only string values in the resulting dict.
     data = yaml.safe_load(raw)
     if not isinstance(data, dict):
-        raise ValueError(f"Config file must contain a YAML mapping, got {type(data).__name__}")
+        raise ValueError(  # noqa: TRY004 — callers and tests expect ValueError
+            f"Config file must contain a YAML mapping, got {type(data).__name__}"
+        )
 
     _interpolate_dict(data, _replace)
     return data

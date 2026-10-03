@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import csv
+from collections.abc import Iterator
 from pathlib import Path
-from typing import IO, Iterator
+from typing import IO
 
 from canopy.core.ingestion.base import BaseConnector
 from canopy.models.config import SourceConfig
