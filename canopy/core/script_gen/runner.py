@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -12,6 +13,22 @@ from canopy.models.execution import ScriptExecutionResult
 
 # Maximum time (seconds) a script subprocess is allowed to run.
 _DEFAULT_TIMEOUT = 60
+
+
+def _docker_available() -> bool:
+    """Check whether ``docker`` CLI is on PATH and the daemon is reachable."""
+    if shutil.which("docker") is None:
+        return False
+    try:
+        proc = subprocess.run(
+            ["docker", "info"],
+            capture_output=True,
+            timeout=10,
+            check=False,
+        )
+        return proc.returncode == 0
+    except (subprocess.TimeoutExpired, OSError):
+        return False
 
 
 def _build_harness(script_path: str, rows_path: str, output_path: str) -> str:
@@ -59,10 +76,41 @@ json.dump({{"output": output, "errors": errors}}, open({output_path!r}, "w"))
 
 
 class ScriptRunner:
-    """Executes generated conversion scripts on data in an isolated subprocess."""
+    """Executes generated conversion scripts on data in an isolated subprocess.
 
-    def __init__(self, timeout: int = _DEFAULT_TIMEOUT) -> None:
+    Parameters
+    ----------
+    timeout:
+        Maximum seconds a single execution may run.
+    use_docker:
+        If ``True``, run the subprocess inside a Docker container for OS-level
+        isolation (requires Docker daemon).  If ``None`` (default), auto-detect
+        Docker availability and fall back to a plain subprocess.
+    docker_image:
+        Docker image to use when ``use_docker`` is enabled.  Must have Python 3
+        installed.
+    """
+
+    def __init__(
+        self,
+        timeout: int = _DEFAULT_TIMEOUT,
+        use_docker: bool | None = None,
+        docker_image: str = "python:3.11-slim",
+    ) -> None:
         self.timeout = timeout
+        self.docker_image = docker_image
+
+        if use_docker is True:
+            if not _docker_available():
+                raise RuntimeError(
+                    "Docker was requested for script isolation but is not available."
+                )
+            self._use_docker = True
+        elif use_docker is False:
+            self._use_docker = False
+        else:
+            # Auto-detect
+            self._use_docker = _docker_available()
 
     def run_on_sample(
         self, script_path: Path, sample_rows: list[dict[str, str]]
@@ -70,9 +118,7 @@ class ScriptRunner:
         """Run the script's transform() on sample rows in a subprocess."""
         return self._run(script_path, sample_rows)
 
-    def run_on_batch(
-        self, script_path: Path, rows: list[dict[str, str]]
-    ) -> ScriptExecutionResult:
+    def run_on_batch(self, script_path: Path, rows: list[dict[str, str]]) -> ScriptExecutionResult:
         """Run transform on a batch during full execution."""
         return self._run(script_path, rows)
 
@@ -80,9 +126,7 @@ class ScriptRunner:
     # Internal
     # ------------------------------------------------------------------
 
-    def _run(
-        self, script_path: Path, rows: list[dict[str, str]]
-    ) -> ScriptExecutionResult:
+    def _run(self, script_path: Path, rows: list[dict[str, str]]) -> ScriptExecutionResult:
         # --- AST validation before execution ---
         try:
             code = script_path.read_text(encoding="utf-8")
@@ -102,17 +146,12 @@ class ScriptRunner:
             )
 
         # --- Run in isolated subprocess ---
+        rows_path = out_path = harness_path = ""
         try:
             with (
-                tempfile.NamedTemporaryFile(
-                    mode="w", suffix=".json", delete=False
-                ) as rows_file,
-                tempfile.NamedTemporaryFile(
-                    mode="w", suffix=".json", delete=False
-                ) as out_file,
-                tempfile.NamedTemporaryFile(
-                    mode="w", suffix=".py", delete=False
-                ) as harness_file,
+                tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as rows_file,
+                tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as out_file,
+                tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as harness_file,
             ):
                 rows_path = rows_file.name
                 out_path = out_file.name
@@ -121,21 +160,55 @@ class ScriptRunner:
                 json.dump(rows, rows_file)
                 rows_file.flush()
 
+            if self._use_docker:
                 harness_code = _build_harness(
-                    str(script_path), rows_path, out_path
+                    "/work/script.py", "/work/rows.json", "/work/output.json"
                 )
-                harness_file.write(harness_code)
-                harness_file.flush()
-
-            proc = subprocess.run(
-                [sys.executable, harness_path],
-                capture_output=True,
-                text=True,
-                timeout=self.timeout,
-                # Do not inherit the parent's environment wholesale — pass a
-                # minimal env so the subprocess cannot read secrets etc.
-                env={"PATH": "", "PYTHONPATH": "", "HOME": ""},
-            )
+                Path(harness_path).write_text(harness_code, encoding="utf-8")
+                proc = subprocess.run(
+                    [
+                        "docker",
+                        "run",
+                        "--rm",
+                        "--network",
+                        "none",
+                        "--memory",
+                        "256m",
+                        "--cpus",
+                        "1",
+                        "--read-only",
+                        "--tmpfs",
+                        "/tmp",
+                        "-v",
+                        f"{script_path}:/work/script.py:ro",
+                        "-v",
+                        f"{rows_path}:/work/rows.json:ro",
+                        "-v",
+                        f"{harness_path}:/work/harness.py:ro",
+                        "-v",
+                        f"{out_path}:/work/output.json",
+                        self.docker_image,
+                        "python",
+                        "/work/harness.py",
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=self.timeout,
+                    check=False,
+                )
+            else:
+                harness_code = _build_harness(str(script_path), rows_path, out_path)
+                Path(harness_path).write_text(harness_code, encoding="utf-8")
+                proc = subprocess.run(
+                    [sys.executable, harness_path],
+                    capture_output=True,
+                    text=True,
+                    timeout=self.timeout,
+                    # Do not inherit the parent's environment wholesale — pass a
+                    # minimal env so the subprocess cannot read secrets etc.
+                    env={"PATH": "", "PYTHONPATH": "", "HOME": ""},
+                    check=False,
+                )
 
             if proc.returncode != 0:
                 stderr = proc.stderr[:500] if proc.stderr else "unknown error"
@@ -145,9 +218,7 @@ class ScriptRunner:
                     row_count_in=len(rows),
                 )
 
-            result_data: dict[str, Any] = json.loads(
-                Path(out_path).read_text(encoding="utf-8")
-            )
+            result_data: dict[str, Any] = json.loads(Path(out_path).read_text(encoding="utf-8"))
             output_rows = result_data.get("output", [])
             errors = result_data.get("errors", [])
 
@@ -165,7 +236,7 @@ class ScriptRunner:
                 errors=[f"Script execution timed out after {self.timeout}s"],
                 row_count_in=len(rows),
             )
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 — runner errors become a failed result
             return ScriptExecutionResult(
                 success=False,
                 errors=[f"Runner error: {type(exc).__name__}: {exc}"],
@@ -174,7 +245,8 @@ class ScriptRunner:
         finally:
             # Clean up temp files
             for p in (rows_path, out_path, harness_path):
-                try:
-                    Path(p).unlink(missing_ok=True)
-                except OSError:
-                    pass
+                if p:
+                    try:
+                        Path(p).unlink(missing_ok=True)
+                    except OSError:
+                        pass

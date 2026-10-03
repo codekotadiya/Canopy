@@ -74,7 +74,7 @@ def validate(
         console.print(f"  Source: {config.source.type} ({config.source.path})")
         console.print(f"  Target: {config.target.type} ({config.target.table_name})")
         console.print(f"  LLM: {config.llm.provider} ({config.llm.model})")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 — any config error is a failed validation
         console.print(f"[red]Config invalid:[/red] {e}")
         raise typer.Exit(code=1)
 
@@ -110,10 +110,9 @@ def rerun(
             total_loaded += loaded
         total_failed += len(result.errors)
 
-    load_summary = loader.finalize()
+    loader.finalize()
     console.print(
-        f"Done: {total_loaded} loaded, {total_failed} failed "
-        f"from {total_source} source rows"
+        f"Done: {total_loaded} loaded, {total_failed} failed from {total_source} source rows"
     )
 
 

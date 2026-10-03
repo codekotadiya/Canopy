@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from canopy.core.script_gen.template import DEFAULT_VALIDATE_FUNC, SCRIPT_TEMPLATE
@@ -73,7 +73,7 @@ class ScriptGenerator:
         transform_func, validate_func = _split_functions(code)
 
         content = SCRIPT_TEMPLATE.format(
-            timestamp=datetime.now(timezone.utc).isoformat(),
+            timestamp=datetime.now(UTC).isoformat(),
             job_id=job_id,
             source_description=source_description.replace("\\", "/"),
             target_table=target_table,

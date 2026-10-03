@@ -9,7 +9,7 @@ from sqlalchemy.engine import Engine
 from canopy.core.context.schema_inspector import SchemaInspector
 from canopy.core.loader.base import BaseLoader
 from canopy.models.execution import LoadSummary
-from canopy.models.schema import ColumnSchema, TargetSchema
+from canopy.models.schema import TargetSchema
 
 # Map SQL type strings from LLM proposals to SQLAlchemy types.
 # Keys are uppercase for case-insensitive matching.
@@ -113,7 +113,7 @@ class PostgresLoader(BaseLoader):
                 conn.execute(table.insert(), rows)
             self._rows_loaded += len(rows)
             return len(rows)
-        except Exception:
+        except Exception:  # noqa: BLE001, S110 — one bad batch falls through to row inserts
             pass  # Fall through to row-level fallback
 
         # Fallback: insert rows individually so one bad row doesn't lose the batch.
@@ -123,7 +123,7 @@ class PostgresLoader(BaseLoader):
                 with self._engine.begin() as conn:
                     conn.execute(table.insert(), [row])
                 loaded += 1
-            except Exception:
+            except Exception:  # noqa: BLE001 — quarantine the row and continue
                 self._rows_failed += 1
                 self._quarantined.append(row)
 

@@ -172,7 +172,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for step-by-step instructions and referen
 
 | Layer | Supported | Planned |
 |-------|-----------|---------|
-| **Sources** | CSV | JSON, XML, SQL databases, PDF, DOCX |
+| **Sources** | CSV, JSON / NDJSON | XML, SQL databases, PDF, DOCX |
 | **LLM Providers** | Ollama (local) | OpenAI, Anthropic |
 | **Targets** | PostgreSQL, SQLite | MySQL, Snowflake, BigQuery |
 
@@ -194,7 +194,8 @@ Canopy generates and executes Python code produced by an LLM. The following safe
 - **Row-level fallback** — If a batch insert fails, the loader retries row-by-row and quarantines failing rows instead of aborting the entire job.
 
 **Current limitations:**
-- Scripts are not yet executed in a container or full OS-level sandbox. The subprocess shares the host filesystem.
+- **Docker sandbox (optional)** — When Docker is available, scripts can run inside a container with no network, read-only filesystem, 256 MB memory limit, and a single CPU. Auto-detected, or set `use_docker=True` on `ScriptRunner`.
+- Without Docker, scripts run in a subprocess that shares the host filesystem.
 - The import allow-list covers common data-processing modules. If your transforms need additional libraries, extend `ALLOWED_MODULES` in `canopy/core/script_gen/validator.py`.
 - Do not use Canopy with untrusted prompt sources in an unsupervised environment.
 
